@@ -1,5 +1,21 @@
+$todo-width-content: 300px;
+$todo-height-content: 30px;
+$todo-width-column: 33%;
 body {
 	background: #f4fcf8;
+}
+%content-common-styles {
+	border-radius: 4px;
+	font-size: 18px;
+	padding: 7px;
+	height: $todo-height-content;
+	width: $todo-width-content;
+	margin-top: 5px;
+	box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.24);
+	border-bottom: 1px solid rgba(0,0,0,.1);
+	background: #fff;
+	display: flex;
+	justify-content: space-between;
 }
 .container {
 	display: flex;
@@ -11,48 +27,29 @@ body {
 	}
 
 	.left-sec {
-		width: 33%;
+		width: $todo-width-column;
 		.content {
-			border-radius: 4px;
-			font-size: 18px;
-			padding: 7px;
-			height: 30px;
-			width: 300px;
-			margin-top: 5px;
-			box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.24);
-			border-bottom: 1px solid rgba(0,0,0,.1);
-			background: #fff;
-			display: flex;
-			justify-content: space-between;
+			@extend %content-common-styles;
 		}
 	}
 
 	.right-sec {
-		width: 33%;
+		width: $todo-width-column;
 		.content {
-			border-radius: 4px;
-			font-size: 18px;
-			height: 30px;
-			width: 300px;
-			padding: 7px;
-			margin-top: 5px;
-			background: #fff;
-			box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.24);
-			border-bottom: 1px solid rgba(0,0,0,.1);
-			display: flex;
-			justify-content: space-between;
+			@extend %content-common-styles;
 		} 
 	}
+	
 	.field-sec {
-		width:33%;
+		width:$todo-width-column;
 		padding: 49px 23px;
 		input {
 			padding: 5px;
 			border: 1px solid grey;
 			border-radius: 3px;
 			font-size: 18px;
-			height: 30px;
-			width: 300px;
+			height: $todo-height-content;
+			width: $todo-width-content;
 		}
 	}
 

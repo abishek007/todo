@@ -34,7 +34,33 @@ class App extends Component {
 		const {reset, updateTodo} = this.props
 		if (event.key === "Enter") {
 			updateTodo(event.target.value)
+			this.todoNotification("added", event.target.value)
 			reset()
+		}
+	}
+
+	todoNotification = (purpose, value) => {
+		if (!("Notification" in window)) {
+			alert("This browser does not support desktop notification");
+		} else if (Notification.permission === "granted") {
+			let title = "TODO"
+					let options = {
+						body: `your task ${value} has been successfully ${purpose}`,
+						icon: "http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png",
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+					}
+					new Notification(title, options)
+		} else if (Notification.permission !== "denied") {
+			Notification.requestPermission().then((permission) => {
+				if (permission === "granted") {
+					let title = "TODO"
+					let options = {
+						body: `your task ${value} has been successfully ${purpose}`,
+						icon: "http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png",
+					}
+					new Notification(title, options)
+				}
+			})
 		}
 	}
 
@@ -48,6 +74,7 @@ class App extends Component {
 			}
 		}
 		updatedTask.splice(index, 1)
+		this.todoNotification("removed", name)
 		removeTask(updatedTask)
 	}
 
