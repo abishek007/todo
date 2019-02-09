@@ -5,7 +5,7 @@ const intialState = {
     {name: "google", status: "todo"},
     {name: "yahoo", status: "done"},
     {name: "uber", status: "done"}
-	],
+  ],
 }
 
 const todoReducer = (state = intialState, action) => {
