@@ -15,41 +15,68 @@ class App extends Component {
   }
   
   drop = (event) => {
-    let name = event.dataTransfer.getData("name")
-    const { transferTask, task } = this.props
-    const updatedTask = cloneDeep(task)
-    for (let i=0;i < updatedTask.length;i++) {
-      if (updatedTask[i].name === name) {
-        updatedTask[i].status = "done"
-      }
-    }
-    transferTask(updatedTask)
-  }
-  
-  dragOver = (event) => {
-    event.preventDefault()
-  }
-  
-  keyPress = (event) => {
-    const {reset, updateTodo} = this.props
-    if (event.key === "Enter") {
-      updateTodo(event.target.value)
-      reset()
-    }
-  }
+			let name = event.dataTransfer.getData("name")
+			const { transferTask, task } = this.props
+			const updatedTask = cloneDeep(task)
+			for (let i=0;i < updatedTask.length;i++) {
+				if (updatedTask[i].name === name) {
+					updatedTask[i].status = "done"
+				}
+			}
+			transferTask(updatedTask)
+	}
+	
+	dragOver = (event) => {
+		event.preventDefault()
+	}
+	
+	keyPress = (event) => {
+		const {reset, updateTodo} = this.props
+		if (event.key === "Enter") {
+			updateTodo(event.target.value)
+			this.todoNotification("added", event.target.value)
+			reset()
+		}
+	}
 
-  removeTask = (event, name) => {
-    const { task, removeTask } = this.props
-    const updatedTask = cloneDeep(task)
-    let index
-    for (let i=0;i < updatedTask.length;i++) {
-      if (updatedTask[i].name === name) {
-        index = i
-      }
-    }
-    updatedTask.splice(index, 1)
-    removeTask(updatedTask)
-  }
+	todoNotification = (purpose, value) => {
+		if (!("Notification" in window)) {
+			alert("This browser does not support desktop notification");
+		} else if (Notification.permission === "granted") {
+			let title = "TODO"
+					let options = {
+						body: `your task ${value} has been successfully ${purpose}`,
+						icon: "http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png",
+						vibrate: [200, 100, 200, 100, 200, 100, 200],
+					}
+					new Notification(title, options)
+		} else if (Notification.permission !== "denied") {
+			Notification.requestPermission().then((permission) => {
+				if (permission === "granted") {
+					let title = "TODO"
+					let options = {
+						body: `your task ${value} has been successfully ${purpose}`,
+						icon: "http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png",
+					}
+					new Notification(title, options)
+				}
+			})
+		}
+	}
+
+	removeTask = (event, name) => {
+		const { task, removeTask } = this.props
+		const updatedTask = cloneDeep(task)
+		let index
+		for (let i=0;i < updatedTask.length;i++) {
+			if (updatedTask[i].name === name) {
+				index = i
+			}
+		}
+		updatedTask.splice(index, 1)
+		this.todoNotification("removed", name)
+		removeTask(updatedTask)
+	}
 
   render() {
     const { task } = this.props
